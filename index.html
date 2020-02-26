@@ -1,22 +1,459 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Exscientia Compounds</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" type="image/png" sizes="32x32" href="/Public/Images/favicon-32x32.png">
-        <link rel="stylesheet" href="/Public/Stylesheets/style.css">
-        <script type="text/javascript" src="/Scripts/jquery-3.4.1.min.js"></script>
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+        
+        <link rel="stylesheet" href="style.css">
+        
+        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+        
+        <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+        
+        <script type="text/javascript" src="Chart.bundle.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="datatables.css"/>
+        <script type="text/javascript" src="datatables.js"></script>
+
+        <script src="https://kit.fontawesome.com/4437fc54eb.js" crossorigin="anonymous"></script>
+
     </head>
     <body>
-        <h1 class="colorRed">Exscientia</h1>
-        
-        <script>
-            $.getJSON('/Public/Data/compounds.json', function(data) {
-                console.log(data);
+        <div id="pageDiv">
+            <div class="container">
+                                    
+                <h1 id="exscientiaHeader">
+                    <span id="exscientiaLogo"><img src="exLogo.jpg"></span>
+                    <span id="exscientiaTitle">Exscientia</span>
+                </h1>
+
+                <p id="pageDescription">The following chart shows 100 compounds plotted...</p>        
+                
+                <div class="chartWrapper">
+                    <canvas id="canvas"></canvas>
+                </div>
+
+                <div id="initiallyVisible" class="invisible">
+                    <table>
+                        <tr>
+                            <td>
+                                Select a compound from the chart above
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div id="viewOnClick" class="unclicked">
+                    <table class="selectedCompoundTable">
+                        <tr>
+                            <td rowspan=6><img id="compImage" src="" alt="Image of selected compound" style="max-height:200px;"></td>
+                            <td class="tableLabel">Molecular Formula:</td>
+                            <td id="moleName"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableLabel">Compound ID:</td>
+                            <td id="compID"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableLabel">Molecular Weight:</td>
+                            <td id="moleWeight"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableLabel">ALogP:</td>
+                            <td id="alogp"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableLabel">Number of Rings:</td>
+                            <td id="numRing"></td>
+                        </tr>
+                        <tr>
+                            <td colspan=2 class="tableLabel"><button id="moreInfBut" onclick=onTable()>More Information</button></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <table id="compoundTb" class="display invisible" style="width:90%">
+                    <thead>
+                        <tr>
+                            <th>Compound ID</th>
+                            <th>Molecular Formula</th>
+                            <th>Number of Rings</th>
+                            <th>ALogP</th>
+                            <th>Molecular Weight</th>
+                            <th>Number of Assay Results</th>
+                            <th>More Details</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Compound ID</th>
+                            <th>Molecular Formula</th>
+                            <th>Number of Rings</th>
+                            <th>ALogP</th>
+                            <th>Molecular Weight</th>
+                            <th>Number of Assay Results</th>
+                            <th>More Details</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <script>  
+
+            var color = Chart.helpers.color;
+
+            var rings1 = [];
+            var rings2 = [];
+            var rings3 = [];
+            var rings4 = [];
+            var rings5 = [];
+            var compoundDataset = [];
+           
+            window.onload = function() {
+                
+                $.getJSON('https://api.myjson.com/bins/13fp8c', function(compData) {
+                    for (var i = 0; i < compData.length; i++) {
+                        if (compData[i].num_rings == 1) {
+                            rings1.push({
+                                x: compData[i].molecular_weight,
+                                y: compData[i].ALogP,
+                                compound: compData[i].molecular_formula,
+                                num_rings: compData[i].num_rings,
+                                comp_id: compData[i].compound_id,
+                                smiles: compData[i].smiles,
+                                imagePath: compData[i].image
+                            })
+                        } else if (compData[i].num_rings == 2) {
+                            rings2.push({
+                                x: compData[i].molecular_weight,
+                                y: compData[i].ALogP,
+                                compound: compData[i].molecular_formula,
+                                num_rings: compData[i].num_rings,
+                                comp_id: compData[i].compound_id,
+                                smiles: compData[i].smiles,
+                                imagePath: compData[i].image
+                            })
+                        } else if (compData[i].num_rings == 3) {
+                            rings3.push({
+                                x: compData[i].molecular_weight,
+                                y: compData[i].ALogP,
+                                compound: compData[i].molecular_formula,
+                                num_rings: compData[i].num_rings,
+                                comp_id: compData[i].compound_id,
+                                smiles: compData[i].smiles,
+                                imagePath: compData[i].image
+                            })
+                        } else if (compData[i].num_rings == 4) {
+                            rings4.push({
+                                x: compData[i].molecular_weight,
+                                y: compData[i].ALogP,
+                                compound: compData[i].molecular_formula,
+                                num_rings: compData[i].num_rings,
+                                comp_id: compData[i].compound_id,
+                                smiles: compData[i].smiles,
+                                imagePath: compData[i].image
+                            })
+                        } else if (compData[i].num_rings == 5) {
+                            rings5.push({
+                                x: compData[i].molecular_weight,
+                                y: compData[i].ALogP,
+                                compound: compData[i].molecular_formula,
+                                num_rings: compData[i].num_rings,
+                                comp_id: compData[i].compound_id,
+                                smiles: compData[i].smiles,
+                                imagePath: compData[i].image
+                            })
+                        }                        
+                    }
+
+                    $("#pageDiv").addClass("pageBackground");
+                    $("#compoundTb").removeClass("invisible");
+                    $("#initiallyVisible").removeClass("invisible");
+
+                    var a = generateChar([rings1, rings2, rings3, rings4, rings5]);
+                    var b = generateTable(compData);
+
+                    return a && b;
+                }); 
+            }
+
+
+            function clickedPointDisplay(compData) {
+                //uses regex to format molecular name to include subscripted numbers
+                var formula = compData.compound.replace(/(\d+)/g, '<sub>$1</sub>');
+                //assigns compounds information to appropriate label
+                document.getElementById('moleName').innerHTML = formula;
+                document.getElementById('compID').innerHTML = compData.comp_id;
+                document.getElementById('moleWeight').innerHTML = compData.x;
+                document.getElementById('alogp').innerHTML = compData.y;
+                document.getElementById('numRing').innerHTML = compData.num_rings;
+                document.getElementById('moreInfBut').setAttribute("molForm", compData.compound);
+
+                $('#initiallyVisible').addClass("unclicked");
+                $('#viewOnClick').removeClass("unclicked");
+
+                $('#compImage').attr("src", compData.imagePath)
+
+                var tabbbb = $("#compoundTb").DataTable();
+                tabbbb.search('').draw()
+            }
+
+            $("#canvas").click(function(evt){
+                const activePoint = myScatter.getElementAtEvent(evt);
+                const datasetIndex = activePoint[0]._datasetIndex;
+                const itemIndex = activePoint[0]._index;
+                console.log(activePoint)
+                console.log(activePoint + " " + datasetIndex + " " + itemIndex)
+
+                var pointData = activePoint[0]._chart.data.datasets[datasetIndex].data[itemIndex];
+                console.log(pointData)
+
+                clickedPointDisplay(pointData);
             });
+           
+            // declare myScatter outside of generateChar function so it can be called by onClick function
+            var myScatter;
+            // function that generates chart from the compound data from compounds.json
+            function generateChar(compoDat) {
+                var ctx = document.getElementById('canvas');
+                myScatter = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [
+                            {
+                                label:"1 Ring",
+                                borderColor: 'rgb(75, 192, 192)',
+                                backgroundColor: color('rgb(75, 192, 192)').alpha(0.2).rgbString(),
+                                data: compoDat[0],
+                                pointRadius: 5,
+                                pointHoverRadius: 15
+                            },
+                            {
+                                label:"2 Rings",
+                                borderColor: 'rgb(255, 99, 132)',
+                                backgroundColor: color('rgb(255, 99, 132)').alpha(0.2).rgbString(),
+                                data: compoDat[1],
+                                pointRadius: 5,
+                                pointHoverRadius: 15
+                            },
+                            {
+                                label:"3 Rings",
+                                borderColor: 'rgb(54, 162, 235)',
+                                backgroundColor: color('rgb(54, 162, 235)').alpha(0.2).rgbString(),
+                                data: compoDat[2],
+                                pointRadius: 5,
+                                pointHoverRadius: 15
+                            },
+                            {
+                                label:"4 Rings",
+                                borderColor: 'rgb(255, 205, 86)',
+                                backgroundColor: color('rgb(255, 205, 86)').alpha(0.2).rgbString(),
+                                data: compoDat[3],
+                                pointRadius: 5,
+                                pointHoverRadius: 15
+                            },
+                            {
+                                label:"5 Rings",
+                                borderColor: 'rgb(33, 51, 61)',
+                                backgroundColor: color('rgb(33, 51, 61)').alpha(0.2).rgbString(),
+                                data: compoDat[4],
+                                pointRadius: 5,
+                                pointHoverRadius: 15
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Exscientia Drug Compounds',
+                            fontSize: 20,
+                            fontFamily: "Raleway"
+                        },
+                        hover: {
+                            onHover: function(e, el) {
+                                $("#canvas").css("cursor", el[0] ? "pointer" : "default");
+                            }
+                        },
+                        scales: {
+                            yAxes: [{
+                                id: "ALogP",
+                                type: "linear",
+                                display: true,
+                                position: "left",
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "ALogP",
+                                    fontStyle: "bold",
+                                    fontSize: 18,
+                                    fontFamily: "Raleway",
+                                    fontColor: "black",
+                                    padding: 10
+                                },
+                                ticks: {
+                                    fontSize: 15,
+                                    fontFamily: "Raleway"
+                                },
+                                gridLines: {
+                                    zeroLineColor: 'unset'
+                                }
+                            }],
+                            xAxes: [{
+                                id: "Molecular Weight",
+                                type: "linear",
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Molecular Weight",
+                                    fontStyle: "bold",
+                                    fontSize: 18,
+                                    fontFamily: "Raleway",
+                                    fontColor: "black",
+                                    padding: 10
+                                },
+                                ticks: {
+                                    fontSize: 15,
+                                    fontFamily: "Raleway"
+                                }
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(tooltipItems, data) {
+                                    //Return value for label
+                                    return ['Molecular Weight: ' + tooltipItems.xLabel, 'ALogP: ' + tooltipItems.yLabel, 'Number of Rings: ' + (tooltipItems.datasetIndex + 1)];
+                                }
+                            },
+                            backgroundColor: '#FFF',
+                            enableHTML: true,
+                            borderColor: '#E85A24',
+                            borderWidth: 3,
+                            titleFontSize: 16,
+                            titleFontColor: '#0066ff',
+                            bodyFontColor: '#000',
+                            bodyFontSize: 14,
+                            bodyFontFamily: 'Raleway',
+                            displayColors: false
+                        },
+                        legend: {
+                            display: true,
+                            position: "right",
+                            labels: {
+                                // fontColor: "#333",
+                                fontSize: 16,
+                                fontFamily: "Raleway",
+                                usePointStyle: true,
+                                boxWidth: 10,
+                                margin: 10
+                            },
+                            onHover: function(e) {
+                                e.target.style.cursor = 'pointer';
+                            }
+                        }
+                    }
+                });
+            };
+
+            function molecularFormulaFormat(unfForm) {
+                //uses regex to format molecular name to include subscripted numbers
+                var formula = unfForm.replace(/(\d+)/g, '<sub>$1</sub>');
+                return formula;
+            }
+
+            function onTable() {
+                var searchDiv = document.getElementById("moreInfBut").getAttribute('molForm');
+                console.log(searchDiv)
+                var tabbbb = $("#compoundTb").DataTable();
+                tabbbb.search(searchDiv).draw()
+                $(".details-control").click();
+            }
+
+            /* Formatting function for row details - modify as you need */
+            function format ( d ) {
+                var toReturn = 
+                '<table id="noHoverBack" style="margin-left:auto;margin-right:auto;margin-bottom:50px;"">'+
+                    '<tr>'+
+                        '<td style="vertical-align:center;">'+
+                            '<table class="masterDetailTable" cellpadding="5" cellspacing="0" border="0">'+
+                                '<tr>'+
+                                    '<th rowspan='+(d.assay_results.length+1)+'>Assay Results</th>'+
+                                    '<th>Index</th>'+
+                                    '<th>Result ID</th>'+
+                                    '<th>Target</th>'+
+                                    '<th>Result</th>'+
+                                '</tr>';
+                d.assay_results.forEach(function(result, index) {
+                    toReturn += 
+                                '<tr>'+
+                                    '<td>'+(index+1)+'</td>'+
+                                    '<td>'+result.result_id+'</td>'+
+                                    '<td>'+result.target+'</td>'+
+                                    '<td>'+(result.result + " " + result.operator + " " + result.value + result.unit)+'</td>' +
+                                '</tr>'
+                });
+                toReturn += 
+                                '<tr>'+
+                                    '<th style="padding-top: 40px !important;">SMILES</th>'+
+                                    '<td colspan=4 style="padding-top: 40px !important; text-align: left; !important">'+d.smiles+'</td>'+
+                                '</tr>'+
+                            '</table>'+
+                        '</td>'+
+                        '<td style="vertical-align:center;">'+
+                            '<img src="'+d.image+'"></img>'+
+                        '</td>'+
+                    '</tr>'+
+                '</table>';
+                return toReturn;
+            }
+            
+            function generateTable(compoundDats) {
+                var table = $('#compoundTb').DataTable( {
+                    "data": compoundDats,
+                    // "select": true,
+                    "columns": [
+                        { "data": "compound_id", "className": "dt-specialColor" },
+                        { "data": "molecular_formula", "className": "dt-specialColor", "render": function ( data, type, row, meta ) { return data.replace(/(\d+)/g, '<sub>$1</sub>')} },
+                        { "data": "num_rings", "className": "dt-specialColor" },
+                        { "data": "ALogP", "className": "dt-specialColor" },
+                        { "data": "molecular_weight", "className": "dt-specialColor" },
+                        { "data": "assay_results.length", "className": "dt-specialColor" },
+                        {
+                            "className":      'details-control',
+                            "orderable":      false,
+                            "data":           null,
+                            "defaultContent": '<i class="fas fa-plus-circle colorRed" aria-hidden="true"></i>'
+                        },
+                    ],
+                    "lengthMenu": [ 20, 50, 100 ],
+                    "order": [[1, 'asc']],
+                });
+                
+                // Add event listener for opening and closing details
+                $('#compoundTb tbody').on('click', 'td.details-control', function () {
+                    var tr = $(this).closest('tr');
+                    var row = table.row( tr );
+                    
+                    var chosen = $(this).parent()
+            
+                    if ( row.child.isShown() ) {
+                        // This row is already open - close it
+                        chosen[0].cells[6].innerHTML = '<i class="fas fa-plus-circle colorRed" aria-hidden="true"></i>';
+                        chosen[0].style.background = '';
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        chosen[0].cells[6].innerHTML = '<i class="fas fa-minus-circle" aria-hidden="true"></i>';
+                        chosen[0].style.background = 'rgba(232,90,36, 0.5)';
+                        row.child( format(row.data()) ).show();
+                        tr.addClass('shown');
+                    }
+                } );
+            };
+
         </script>
     </body>
 </html>

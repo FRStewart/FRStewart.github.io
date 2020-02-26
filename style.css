@@ -36,6 +36,10 @@ body::-webkit-scrollbar {
     padding-left: 10px;
 }
 
+.colorRed {
+    color: #E85A24 !important;
+}
+
 #pageDescription {
     margin-left: 5%;
     padding-top: 5%;
