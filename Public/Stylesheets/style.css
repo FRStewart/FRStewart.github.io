@@ -40,7 +40,6 @@ body::-webkit-scrollbar {
     border-bottom: 2px solid #E85A24;
   }
   
-/* Style the links inside the navigation bar */
 .topnav a {
     /* float: left; */
     color: black;
