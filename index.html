@@ -20,6 +20,13 @@
         <script src="https://kit.fontawesome.com/4437fc54eb.js" crossorigin="anonymous"></script>
     </head>
     <body>
+
+        <div class="topnav">
+            <a class="topNavLeft" href="https://exscientia.ai">Exscientia</a>
+            <a id="spanFS" class="topNavRight" href="#" onclick="toggleFullScreen()">Fullscreen</a>
+            <a class="topNavRight" href="https://github.com/FRStewart/FRStewart.github.io/blob/master/README.md">App Info.</a>
+            <a class="topNavRight" href="https://github.com/FRStewart/FRStewart.github.io">Source</a>
+        </div>
         
         <div id="loading">
             <img id="loading-image" src="Public/Animations/Spinner-1s-291px.gif" style="height: 30%;" alt="Loading..." />
@@ -112,6 +119,30 @@
             </div>
         </div>
         <script>  
+
+            function toggleFullScreen() {
+                var FSid = document.getElementById("spanFS");
+                if (!document.fullscreenElement &&    // alternative standard method
+                    !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.mozRequestFullScreen) {
+                        document.documentElement.mozRequestFullScreen();
+                    } else if (document.documentElement.webkitRequestFullscreen) {
+                        document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                    }
+                    FSid.innerHTML = "Normalscreen";
+                } else {
+                    if (document.cancelFullScreen) {
+                        document.cancelFullScreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitCancelFullScreen) {
+                        document.webkitCancelFullScreen();
+                    }
+                    FSid.innerHTML = "Fullscreen";
+                }
+            }
 
             var color = Chart.helpers.color;
 

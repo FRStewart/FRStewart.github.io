@@ -33,6 +33,46 @@ body::-webkit-scrollbar {
     z-index: 100;
 }
 
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: rgba(232,90,36, 0.5);
+    overflow: hidden;
+    border-bottom: 2px solid #E85A24;
+  }
+  
+/* Style the links inside the navigation bar */
+.topnav a {
+    /* float: left; */
+    color: black;
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.topNavLeft {
+    float: left;
+    margin-left: 20px;
+}
+
+.topNavRight {
+    float: right;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+#spanFS {
+    margin-right: 25px;
+}
+  
+  /* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #E85A24;
+    color: black;
+}
+  
+
 #exscientiaHeader {
     display: table;
     margin-left: 5%;
