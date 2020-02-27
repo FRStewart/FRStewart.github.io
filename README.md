@@ -20,7 +20,7 @@ The web app has the following functionality:
 - **Charts:**
   - Different data groups (number of rings) can be toggled via the legend.
   - Clicking a point will reveal more information. 
-    -   This will also reveal a _ _More Information_ _ button. Clicking this will open the selected compound(s) in the data table.
+    -   This will also reveal a _More Information_ button. Clicking this will open the selected compound(s) in the data table.
 - **Tables:**
   - The tables are formatted in a master-detail setup.
   - 20 compounds are displayed as default, this can be changed by the user via the dropdown.
