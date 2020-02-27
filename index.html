@@ -6,12 +6,13 @@
         <title>Exscientia Compounds</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet" type='text/css'>
+
         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
         
         <link rel="stylesheet" href="style.css">
-        
-        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
-        
+                
         <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
         
         <script type="text/javascript" src="Chart.bundle.js"></script>
@@ -23,15 +24,27 @@
 
     </head>
     <body>
-        <div id="pageDiv">
-            <div class="container">
+        
+        <div id="loading">
+            <img id="loading-image" src="Spinner-1s-291px.gif" style="height: 30%;" alt="Loading..." />
+        </div>
+        
+        <div id="pageDiv" class="pageBackground">
+            <div class="container" style="min-height: 100vh;">
                                     
-                <h1 id="exscientiaHeader">
-                    <span id="exscientiaLogo"><img src="exLogo.jpg"></span>
-                    <span id="exscientiaTitle">Exscientia</span>
-                </h1>
+                <div id="headDiv" class="unclicked">
+                    <a href="https://www.exscientia.ai/" style="text-decoration: none;">
+                        <h1 id="exscientiaHeader">
+                            <span id="exscientiaLogo"><img src="exLogo.jpg"></span>
+                            <span id="exscientiaTitle">Exscientia</span>
+                        </h1>
+                    </a>
+                </div>
 
-                <p id="pageDescription">The following chart shows 100 compounds plotted...</p>        
+                <div id="pageDescription" class="unclicked">
+                    <p align="center">This web app represents a small data set of compounds and assay results extracted from ChEMBL.</p> 
+                    <p align="center">The chart and table are interactive and selecting a compound will display more information and results.</p>
+                </div>        
                 
                 <div class="chartWrapper">
                     <canvas id="canvas"></canvas>
@@ -41,7 +54,7 @@
                     <table>
                         <tr>
                             <td>
-                                Select a compound from the chart above
+                                Select a compound from the chart to view more information
                             </td>
                         </tr>
                     </table>
@@ -114,7 +127,6 @@
             var compoundDataset = [];
            
             window.onload = function() {
-                
                 $.getJSON('https://api.myjson.com/bins/13fp8c', function(compData) {
                     for (var i = 0; i < compData.length; i++) {
                         if (compData[i].num_rings == 1) {
@@ -173,9 +185,13 @@
                     $("#pageDiv").addClass("pageBackground");
                     $("#compoundTb").removeClass("invisible");
                     $("#initiallyVisible").removeClass("invisible");
+                    $("#headDiv").removeClass("unclicked");
+                    $("#pageDescription").removeClass("unclicked");
 
                     var a = generateChar([rings1, rings2, rings3, rings4, rings5]);
                     var b = generateTable(compData);
+
+                    $('#loading').hide();
 
                     return a && b;
                 }); 
@@ -269,9 +285,10 @@
                     options: {
                         title: {
                             display: true,
-                            text: 'Exscientia Drug Compounds',
+                            text: 'Selected ChEMBL Compounds',
                             fontSize: 20,
-                            fontFamily: "Raleway"
+                            fontFamily: "Raleway",
+                            fontColor: "black",
                         },
                         hover: {
                             onHover: function(e, el) {
@@ -279,45 +296,56 @@
                             }
                         },
                         scales: {
-                            yAxes: [{
-                                id: "ALogP",
-                                type: "linear",
-                                display: true,
-                                position: "left",
-                                scaleLabel: {
+                            yAxes: [
+                                {
+                                    id: "ALogP",
+                                    type: "linear",
                                     display: true,
-                                    labelString: "ALogP",
-                                    fontStyle: "bold",
-                                    fontSize: 18,
-                                    fontFamily: "Raleway",
-                                    fontColor: "black",
-                                    padding: 10
-                                },
-                                ticks: {
-                                    fontSize: 15,
-                                    fontFamily: "Raleway"
-                                },
-                                gridLines: {
-                                    zeroLineColor: 'unset'
+                                    position: "left",
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: "ALogP",
+                                        fontStyle: "bold",
+                                        fontSize: 20,
+                                        fontFamily: "Raleway",
+                                        fontColor: "black",
+                                        padding: 10
+                                    },
+                                    ticks: {
+                                        fontSize: 15,
+                                        fontFamily: "Raleway",
+                                        fontColor: "black"
+                                    },
+                                    gridLines: {
+                                        zeroLineColor: 'unset',
+                                        borderDash: [2, 2]
+                                    }
                                 }
-                            }],
-                            xAxes: [{
-                                id: "Molecular Weight",
-                                type: "linear",
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: "Molecular Weight",
-                                    fontStyle: "bold",
-                                    fontSize: 18,
-                                    fontFamily: "Raleway",
-                                    fontColor: "black",
-                                    padding: 10
-                                },
-                                ticks: {
-                                    fontSize: 15,
-                                    fontFamily: "Raleway"
+                            ],
+                            xAxes: [
+                                {
+                                    id: "Molecular Weight",
+                                    type: "linear",
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: "Molecular Weight",
+                                        fontStyle: "bold",
+                                        fontSize: 18,
+                                        fontFamily: "Raleway",
+                                        fontColor: "black",
+                                        padding: 10
+                                    },
+                                    ticks: {
+                                        fontSize: 15,
+                                        fontFamily: "Raleway",
+                                        fontColor: "black"
+                                    },
+                                    gridLines: {
+                                        zeroLineColor: 'unset',
+                                        borderDash: [2, 2]
+                                    }
                                 }
-                            }]
+                            ]
                         },
                         tooltips: {
                             callbacks: {
@@ -344,9 +372,10 @@
                                 // fontColor: "#333",
                                 fontSize: 16,
                                 fontFamily: "Raleway",
+                                fontColor: "black",
                                 usePointStyle: true,
                                 boxWidth: 10,
-                                margin: 10
+                                padding: 20
                             },
                             onHover: function(e) {
                                 e.target.style.cursor = 'pointer';
