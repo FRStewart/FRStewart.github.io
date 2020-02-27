@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!-- Web App meta data -->
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Exscientia Compounds</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet" type='text/css'>
-
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-        
-        <link rel="stylesheet" href="style.css">
-                
-        <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
-        
-        <script type="text/javascript" src="Chart.bundle.js"></script>
-
-        <link rel="stylesheet" type="text/css" href="datatables.css"/>
-        <script type="text/javascript" src="datatables.js"></script>
-
+        <!-- Icon used by webpages, sourced from Exscientia.ai web page -->
+        <link rel="icon" type="image/png" sizes="32x32" href="Public/Images/favicon-32x32.png">
+        <!-- Stylesheets used by the web app. Locally stored and CDNs -->
+        <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet" type='text/css'>       
+        <link rel="stylesheet" href="Public/Stylesheets/style.css">
+        <link rel="stylesheet" type="text/css" href="Public/Stylesheets/datatables.css"/>
+        <!-- Scripts used by web app. Locally stored and CDNs. jQuery, ChartJS, datatables -->
+        <script type="text/javascript" src="Scripts/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="Scripts/Chart.bundle.js"></script>
+        <script type="text/javascript" src="Scripts/datatables.js"></script>
         <script src="https://kit.fontawesome.com/4437fc54eb.js" crossorigin="anonymous"></script>
-
     </head>
     <body>
         
         <div id="loading">
-            <img id="loading-image" src="Spinner-1s-291px.gif" style="height: 30%;" alt="Loading..." />
+            <img id="loading-image" src="Public/Animations/Spinner-1s-291px.gif" style="height: 30%;" alt="Loading..." />
         </div>
         
         <div id="pageDiv" class="pageBackground">
@@ -35,7 +31,7 @@
                 <div id="headDiv" class="unclicked">
                     <a href="https://www.exscientia.ai/" style="text-decoration: none;">
                         <h1 id="exscientiaHeader">
-                            <span id="exscientiaLogo"><img src="exLogo.jpg"></span>
+                            <span id="exscientiaLogo"><img src="Public/Images/exLogo.jpg"></span>
                             <span id="exscientiaTitle">Exscientia</span>
                         </h1>
                     </a>
@@ -212,7 +208,7 @@
                 $('#initiallyVisible').addClass("unclicked");
                 $('#viewOnClick').removeClass("unclicked");
 
-                $('#compImage').attr("src", compData.imagePath)
+                $('#compImage').attr("src", "Data/" + compData.imagePath)
 
                 var tabbbb = $("#compoundTb").DataTable();
                 tabbbb.search('').draw()
@@ -430,7 +426,7 @@
                             '</table>'+
                         '</td>'+
                         '<td style="vertical-align:center;">'+
-                            '<img src="'+d.image+'"></img>'+
+                            '<img src="Data/'+d.image+'"></img>'+
                         '</td>'+
                     '</tr>'+
                 '</table>';
