@@ -20,21 +20,22 @@
         <script src="https://kit.fontawesome.com/4437fc54eb.js" crossorigin="anonymous"></script>
     </head>
     <body>
-
+        <!-- This div creates a Nav Bar containing buttons directing the user to exscientia.ai, README.md, and the source repository. It also contains a fullscreen toggle -->
         <div class="topnav">
             <a class="topNavLeft" href="https://exscientia.ai">Exscientia</a>
             <a id="spanFS" class="topNavRight" href="#" onclick="toggleFullScreen()">Fullscreen</a>
             <a class="topNavRight" href="https://github.com/FRStewart/FRStewart.github.io/blob/master/README.md">App Info.</a>
             <a class="topNavRight" href="https://github.com/FRStewart/FRStewart.github.io">Source</a>
         </div>
-        
+        <!-- This defines a pre-configured loading animation on page load. Once the content is ready it disappears. -->
         <div id="loading">
             <img id="loading-image" src="Public/Animations/Spinner-1s-291px.gif" style="height: 30%;" alt="Loading..." />
         </div>
-        
+        <!-- This is the main page content -->
         <div id="pageDiv" class="pageBackground">
+            <!-- Inline style is set here to ensure container is full page height before content loads -->
             <div class="container" style="min-height: 100vh;">
-                                    
+                <!-- Exscientia logo and header is displayed here. It is a clickable link that takes users to the Exscientia website -->
                 <div id="headDiv" class="unclicked">
                     <a href="https://www.exscientia.ai/" style="text-decoration: none;">
                         <h1 id="exscientiaHeader">
@@ -43,26 +44,20 @@
                         </h1>
                     </a>
                 </div>
-
+                <!-- This gives a brief description of the web app purpose. Further info. can be found in the README.md file. -->
                 <div id="pageDescription" class="unclicked">
                     <p align="center">This web app represents a small data set of compounds and assay results extracted from ChEMBL.</p> 
                     <p align="center">The chart and table are interactive and selecting a compound will display more information and results.</p>
                 </div>        
-                
+                <!-- Lets chartJS know where the chart should be placed. -->
                 <div class="chartWrapper">
                     <canvas id="canvas"></canvas>
                 </div>
-
+                <!-- (1/2) When a compound is clicked on the chart this div is removed and replaced with compound info. below -->
                 <div id="initiallyVisible" class="invisible">
-                    <table>
-                        <tr>
-                            <td>
-                                Select a compound from the chart to view more information
-                            </td>
-                        </tr>
-                    </table>
+                    <table><tr><td>Select a compound from the chart to view more information</td></tr></table>
                 </div>
-                
+                <!-- (2/2) When a compound is clicked on the chart further information is displayed as detailed below -->
                 <div id="viewOnClick" class="unclicked">
                     <table class="selectedCompoundTable">
                         <tr>
@@ -91,7 +86,7 @@
                         </tr>
                     </table>
                 </div>
-
+                <!-- This initiates the master detail table before DataTables applies further formatting. -->
                 <table id="compoundTb" class="display invisible" style="width:90%">
                     <thead>
                         <tr>
@@ -118,399 +113,14 @@
                 </table>
             </div>
         </div>
-        <script>  
-
-            function toggleFullScreen() {
-                var FSid = document.getElementById("spanFS");
-                if (!document.fullscreenElement &&    // alternative standard method
-                    !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
-                    if (document.documentElement.requestFullscreen) {
-                        document.documentElement.requestFullscreen();
-                    } else if (document.documentElement.mozRequestFullScreen) {
-                        document.documentElement.mozRequestFullScreen();
-                    } else if (document.documentElement.webkitRequestFullscreen) {
-                        document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                    }
-                    FSid.innerHTML = "Normalscreen";
-                } else {
-                    if (document.cancelFullScreen) {
-                        document.cancelFullScreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.webkitCancelFullScreen) {
-                        document.webkitCancelFullScreen();
-                    }
-                    FSid.innerHTML = "Fullscreen";
-                }
-            }
-
-            var color = Chart.helpers.color;
-
-            var rings1 = [];
-            var rings2 = [];
-            var rings3 = [];
-            var rings4 = [];
-            var rings5 = [];
-            var compoundDataset = [];
-           
-            window.onload = function() {
-                $.getJSON('https://api.myjson.com/bins/13fp8c', function(compData) {
-                    for (var i = 0; i < compData.length; i++) {
-                        if (compData[i].num_rings == 1) {
-                            rings1.push({
-                                x: compData[i].molecular_weight,
-                                y: compData[i].ALogP,
-                                compound: compData[i].molecular_formula,
-                                num_rings: compData[i].num_rings,
-                                comp_id: compData[i].compound_id,
-                                smiles: compData[i].smiles,
-                                imagePath: compData[i].image
-                            })
-                        } else if (compData[i].num_rings == 2) {
-                            rings2.push({
-                                x: compData[i].molecular_weight,
-                                y: compData[i].ALogP,
-                                compound: compData[i].molecular_formula,
-                                num_rings: compData[i].num_rings,
-                                comp_id: compData[i].compound_id,
-                                smiles: compData[i].smiles,
-                                imagePath: compData[i].image
-                            })
-                        } else if (compData[i].num_rings == 3) {
-                            rings3.push({
-                                x: compData[i].molecular_weight,
-                                y: compData[i].ALogP,
-                                compound: compData[i].molecular_formula,
-                                num_rings: compData[i].num_rings,
-                                comp_id: compData[i].compound_id,
-                                smiles: compData[i].smiles,
-                                imagePath: compData[i].image
-                            })
-                        } else if (compData[i].num_rings == 4) {
-                            rings4.push({
-                                x: compData[i].molecular_weight,
-                                y: compData[i].ALogP,
-                                compound: compData[i].molecular_formula,
-                                num_rings: compData[i].num_rings,
-                                comp_id: compData[i].compound_id,
-                                smiles: compData[i].smiles,
-                                imagePath: compData[i].image
-                            })
-                        } else if (compData[i].num_rings == 5) {
-                            rings5.push({
-                                x: compData[i].molecular_weight,
-                                y: compData[i].ALogP,
-                                compound: compData[i].molecular_formula,
-                                num_rings: compData[i].num_rings,
-                                comp_id: compData[i].compound_id,
-                                smiles: compData[i].smiles,
-                                imagePath: compData[i].image
-                            })
-                        }                        
-                    }
-
-                    $("#pageDiv").addClass("pageBackground");
-                    $("#compoundTb").removeClass("invisible");
-                    $("#initiallyVisible").removeClass("invisible");
-                    $("#headDiv").removeClass("unclicked");
-                    $("#pageDescription").removeClass("unclicked");
-
-                    var a = generateChar([rings1, rings2, rings3, rings4, rings5]);
-                    var b = generateTable(compData);
-
-                    $('#loading').hide();
-
-                    return a && b;
-                }); 
-            }
-
-
-            function clickedPointDisplay(compData) {
-                //uses regex to format molecular name to include subscripted numbers
-                var formula = compData.compound.replace(/(\d+)/g, '<sub>$1</sub>');
-                //assigns compounds information to appropriate label
-                document.getElementById('moleName').innerHTML = formula;
-                document.getElementById('compID').innerHTML = compData.comp_id;
-                document.getElementById('moleWeight').innerHTML = compData.x;
-                document.getElementById('alogp').innerHTML = compData.y;
-                document.getElementById('numRing').innerHTML = compData.num_rings;
-                document.getElementById('moreInfBut').setAttribute("molForm", compData.compound);
-
-                $('#initiallyVisible').addClass("unclicked");
-                $('#viewOnClick').removeClass("unclicked");
-
-                $('#compImage').attr("src", "Data/" + compData.imagePath)
-
-                var tabbbb = $("#compoundTb").DataTable();
-                tabbbb.search('').draw()
-            }
-
-            $("#canvas").click(function(evt){
-                const activePoint = myScatter.getElementAtEvent(evt);
-                const datasetIndex = activePoint[0]._datasetIndex;
-                const itemIndex = activePoint[0]._index;
-                console.log(activePoint)
-                console.log(activePoint + " " + datasetIndex + " " + itemIndex)
-
-                var pointData = activePoint[0]._chart.data.datasets[datasetIndex].data[itemIndex];
-                console.log(pointData)
-
-                clickedPointDisplay(pointData);
-            });
-           
-            // declare myScatter outside of generateChar function so it can be called by onClick function
-            var myScatter;
-            // function that generates chart from the compound data from compounds.json
-            function generateChar(compoDat) {
-                var ctx = document.getElementById('canvas');
-                myScatter = new Chart(ctx, {
-                    type: 'scatter',
-                    data: {
-                        datasets: [
-                            {
-                                label:"1 Ring",
-                                borderColor: 'rgb(75, 192, 192)',
-                                backgroundColor: color('rgb(75, 192, 192)').alpha(0.2).rgbString(),
-                                data: compoDat[0],
-                                pointRadius: 5,
-                                pointHoverRadius: 15
-                            },
-                            {
-                                label:"2 Rings",
-                                borderColor: 'rgb(255, 99, 132)',
-                                backgroundColor: color('rgb(255, 99, 132)').alpha(0.2).rgbString(),
-                                data: compoDat[1],
-                                pointRadius: 5,
-                                pointHoverRadius: 15
-                            },
-                            {
-                                label:"3 Rings",
-                                borderColor: 'rgb(54, 162, 235)',
-                                backgroundColor: color('rgb(54, 162, 235)').alpha(0.2).rgbString(),
-                                data: compoDat[2],
-                                pointRadius: 5,
-                                pointHoverRadius: 15
-                            },
-                            {
-                                label:"4 Rings",
-                                borderColor: 'rgb(255, 205, 86)',
-                                backgroundColor: color('rgb(255, 205, 86)').alpha(0.2).rgbString(),
-                                data: compoDat[3],
-                                pointRadius: 5,
-                                pointHoverRadius: 15
-                            },
-                            {
-                                label:"5 Rings",
-                                borderColor: 'rgb(33, 51, 61)',
-                                backgroundColor: color('rgb(33, 51, 61)').alpha(0.2).rgbString(),
-                                data: compoDat[4],
-                                pointRadius: 5,
-                                pointHoverRadius: 15
-                            }
-                        ]
-                    },
-                    options: {
-                        title: {
-                            display: true,
-                            text: 'Selected ChEMBL Compounds',
-                            fontSize: 20,
-                            fontFamily: "Raleway",
-                            fontColor: "black",
-                        },
-                        hover: {
-                            onHover: function(e, el) {
-                                $("#canvas").css("cursor", el[0] ? "pointer" : "default");
-                            }
-                        },
-                        scales: {
-                            yAxes: [
-                                {
-                                    id: "ALogP",
-                                    type: "linear",
-                                    display: true,
-                                    position: "left",
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: "ALogP",
-                                        fontStyle: "bold",
-                                        fontSize: 20,
-                                        fontFamily: "Raleway",
-                                        fontColor: "black",
-                                        padding: 10
-                                    },
-                                    ticks: {
-                                        fontSize: 15,
-                                        fontFamily: "Raleway",
-                                        fontColor: "black"
-                                    },
-                                    gridLines: {
-                                        zeroLineColor: 'unset',
-                                        borderDash: [2, 2]
-                                    }
-                                }
-                            ],
-                            xAxes: [
-                                {
-                                    id: "Molecular Weight",
-                                    type: "linear",
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: "Molecular Weight",
-                                        fontStyle: "bold",
-                                        fontSize: 18,
-                                        fontFamily: "Raleway",
-                                        fontColor: "black",
-                                        padding: 10
-                                    },
-                                    ticks: {
-                                        fontSize: 15,
-                                        fontFamily: "Raleway",
-                                        fontColor: "black"
-                                    },
-                                    gridLines: {
-                                        zeroLineColor: 'unset',
-                                        borderDash: [2, 2]
-                                    }
-                                }
-                            ]
-                        },
-                        tooltips: {
-                            callbacks: {
-                                label: function(tooltipItems, data) {
-                                    //Return value for label
-                                    return ['Molecular Weight: ' + tooltipItems.xLabel, 'ALogP: ' + tooltipItems.yLabel, 'Number of Rings: ' + (tooltipItems.datasetIndex + 1)];
-                                }
-                            },
-                            backgroundColor: '#FFF',
-                            enableHTML: true,
-                            borderColor: '#E85A24',
-                            borderWidth: 3,
-                            titleFontSize: 16,
-                            titleFontColor: '#0066ff',
-                            bodyFontColor: '#000',
-                            bodyFontSize: 14,
-                            bodyFontFamily: 'Raleway',
-                            displayColors: false
-                        },
-                        legend: {
-                            display: true,
-                            position: "right",
-                            labels: {
-                                // fontColor: "#333",
-                                fontSize: 16,
-                                fontFamily: "Raleway",
-                                fontColor: "black",
-                                usePointStyle: true,
-                                boxWidth: 10,
-                                padding: 20
-                            },
-                            onHover: function(e) {
-                                e.target.style.cursor = 'pointer';
-                            }
-                        }
-                    }
-                });
-            };
-
-            function molecularFormulaFormat(unfForm) {
-                //uses regex to format molecular name to include subscripted numbers
-                var formula = unfForm.replace(/(\d+)/g, '<sub>$1</sub>');
-                return formula;
-            }
-
-            function onTable() {
-                var searchDiv = document.getElementById("moreInfBut").getAttribute('molForm');
-                console.log(searchDiv)
-                var tabbbb = $("#compoundTb").DataTable();
-                tabbbb.search(searchDiv).draw()
-                $(".details-control").click();
-            }
-
-            /* Formatting function for row details - modify as you need */
-            function format ( d ) {
-                var toReturn = 
-                '<table id="noHoverBack" style="margin-left:auto;margin-right:auto;margin-bottom:50px;"">'+
-                    '<tr>'+
-                        '<td style="vertical-align:center;">'+
-                            '<table class="masterDetailTable" cellpadding="5" cellspacing="0" border="0">'+
-                                '<tr>'+
-                                    '<th rowspan='+(d.assay_results.length+1)+'>Assay Results</th>'+
-                                    '<th>Index</th>'+
-                                    '<th>Result ID</th>'+
-                                    '<th>Target</th>'+
-                                    '<th>Result</th>'+
-                                '</tr>';
-                d.assay_results.forEach(function(result, index) {
-                    toReturn += 
-                                '<tr>'+
-                                    '<td>'+(index+1)+'</td>'+
-                                    '<td>'+result.result_id+'</td>'+
-                                    '<td>'+result.target+'</td>'+
-                                    '<td>'+(result.result + " " + result.operator + " " + result.value + result.unit)+'</td>' +
-                                '</tr>'
-                });
-                toReturn += 
-                                '<tr>'+
-                                    '<th style="padding-top: 40px !important;">SMILES</th>'+
-                                    '<td colspan=4 style="padding-top: 40px !important; text-align: left; !important">'+d.smiles+'</td>'+
-                                '</tr>'+
-                            '</table>'+
-                        '</td>'+
-                        '<td style="vertical-align:center;">'+
-                            '<img src="Data/'+d.image+'"></img>'+
-                        '</td>'+
-                    '</tr>'+
-                '</table>';
-                return toReturn;
-            }
-            
-            function generateTable(compoundDats) {
-                var table = $('#compoundTb').DataTable( {
-                    "data": compoundDats,
-                    // "select": true,
-                    "columns": [
-                        { "data": "compound_id", "className": "dt-specialColor" },
-                        { "data": "molecular_formula", "className": "dt-specialColor", "render": function ( data, type, row, meta ) { return data.replace(/(\d+)/g, '<sub>$1</sub>')} },
-                        { "data": "num_rings", "className": "dt-specialColor" },
-                        { "data": "ALogP", "className": "dt-specialColor" },
-                        { "data": "molecular_weight", "className": "dt-specialColor" },
-                        { "data": "assay_results.length", "className": "dt-specialColor" },
-                        {
-                            "className":      'details-control',
-                            "orderable":      false,
-                            "data":           null,
-                            "defaultContent": '<i class="fas fa-plus-circle colorRed" aria-hidden="true"></i>'
-                        },
-                    ],
-                    "lengthMenu": [ 20, 50, 100 ],
-                    "order": [[1, 'asc']],
-                });
-                
-                // Add event listener for opening and closing details
-                $('#compoundTb tbody').on('click', 'td.details-control', function () {
-                    var tr = $(this).closest('tr');
-                    var row = table.row( tr );
-                    
-                    var chosen = $(this).parent()
-            
-                    if ( row.child.isShown() ) {
-                        // This row is already open - close it
-                        chosen[0].cells[6].innerHTML = '<i class="fas fa-plus-circle colorRed" aria-hidden="true"></i>';
-                        chosen[0].style.background = '';
-                        row.child.hide();
-                        tr.removeClass('shown');
-                    }
-                    else {
-                        // Open this row
-                        chosen[0].cells[6].innerHTML = '<i class="fas fa-minus-circle" aria-hidden="true"></i>';
-                        chosen[0].style.background = 'rgba(232,90,36, 0.5)';
-                        row.child( format(row.data()) ).show();
-                        tr.addClass('shown');
-                    }
-                } );
-            };
-
-        </script>
+        <!-- middleware.js contains general functions such as molecularFormulaFormat and toggleFullscreen -->
+        <script type="text/javascript" src="Scripts/middleware.js"></script>
+        <!-- chartFunctions.js contains functions used to populate the compound chart -->
+        <script type="text/javascript" src="Scripts/chartFunctions.js"></script>
+        <!-- tableFunctions.js contains functions used to populate the master detail table -->
+        <script type="text/javascript" src="Scripts/tableFunctions.js"></script>
+        <!-- dataRetrieval collects compound data and populates the web app -->
+        <script type="text/javascript" src="Scripts/dataRetrieval.js"></script>
     </body>
 </html>
 

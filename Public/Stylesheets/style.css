@@ -1,18 +1,34 @@
+/* Margin set to 0 so there are no white borders around body */
 * {
     margin: 0;
 }
 
+/* Set default font to 'Raleway' - extracted from google fonts */
 body {
     font-family: 'Raleway';
     margin: 0 !important;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
-
+/* Hide scrollbar but still allow user to scroll down page */
 body::-webkit-scrollbar {
     display: none;
 }
 
+/* Classes for hiding and showing elements */
+.unclicked {
+    display: none;
+}
+#initiallyVisible table {
+    margin-left: auto;
+    margin-right: auto;
+}
+#initiallyVisible td {
+    font-size: 16pt;
+    height: 200px;
+}
+
+/* Assigns formatting and position to the loading animation */
 #loading {
     width: 100%;
     height: 100%;
@@ -25,7 +41,7 @@ body::-webkit-scrollbar {
     z-index: 99;
     text-align: center;
 }
-
+/* Assigns formatting and position to the loading animation */
 #loading-image {
     position: absolute;
     top: 35%;
@@ -33,15 +49,14 @@ body::-webkit-scrollbar {
     z-index: 100;
 }
 
-/* Add a black background color to the top navigation */
+/* Add a matching background colour (to page background) to the navigation bar */
 .topnav {
     background-color: rgba(232,90,36, 0.5);
     overflow: hidden;
     border-bottom: 2px solid #E85A24;
-  }
-  
+}
+/* Assigns formatting to individual buttons */
 .topnav a {
-    /* float: left; */
     color: black;
     text-align: center;
     padding: 10px 20px;
@@ -49,44 +64,55 @@ body::-webkit-scrollbar {
     font-size: 22px;
     font-weight: bold;
 }
-
+/* Forces exscientia button to left side */
 .topNavLeft {
     float: left;
     margin-left: 20px;
 }
-
+/* Forces other buttons to right side */
 .topNavRight {
     float: right;
     padding-right: 20px;
     padding-left: 20px;
 }
-
-#spanFS {
-    margin-right: 25px;
-}
-  
-  /* Change the color of links on hover */
+/* Change the colour of buttons on hover */
 .topnav a:hover {
     background-color: #E85A24;
     color: black;
 }
-  
+/* Adds extra margin to far-right fullscreen button */
+#spanFS {
+    margin-right: 25px;
+}
 
+/* Sets background to transparent exscientia colours */
+.pageBackground {
+    background-color: rgba(232,90,36, 0.5);
+    padding-bottom: 25px;
+    padding-top: 25px;
+}
+
+/* Sets white background behind main page elements */
+.container {
+    margin-left: 10% !important;
+    margin-right: 10% !important;
+    background-color: white;
+    border-radius: 5px;
+}
+  
+/* This section applies formatting to exscientia logo and header */
 #exscientiaHeader {
     display: table;
     margin-left: 5%;
     padding-top: 5%;
 }
-
 #exscientiaTitle, #exscientiaLogo {
     vertical-align: middle;
     display: table-cell;
 }
-
 #exscientiaLogo img {
     height: 65px !important;
 }
-
 #exscientiaTitle {
     color: #000;
     font-size: 50px;
@@ -94,146 +120,35 @@ body::-webkit-scrollbar {
     padding-left: 10px;
 }
 
-.colorRed {
-    color: #E85A24 !important;
-}
-
+/* Applies formatting to brief page description below header */
 #pageDescription {
     padding-top: 5%;
     padding-bottom: 5%;
 }
-
 #pageDescription  p {
     font-size: 16pt;
     padding-top: 15px;
     padding-bottom: 15px;
 }
 
-.pageBackground {
-    background-color: rgba(232,90,36, 0.5);
-    padding-bottom: 25px;
-    padding-top: 25px;
-}
-
-.container {
-    margin-left: 10% !important;
-    margin-right: 10% !important;
-    background-color: white;
-    border-radius: 5px;
-}
-
+/* Sets size and margins on the compound chart */
 .chartWrapper {
-    width: 70%;
+    width: 75%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 50px;
 }
 
+/* Sets formatting for compound information table once it has been clicked */
 .selectedCompoundTable {
-    /* width: 1000px; */
     margin-left: auto;
     margin-right: auto;
 }
-
 .tableLabel {
     text-align: right;
     padding-right: 20px;
     padding-left: 20px;
 }
-
-.unclicked {
-    display: none;
-}
-
-#initiallyVisible table {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#initiallyVisible td {
-    font-size: 16pt;
-    height: 200px;
-}
-
-.compoundClass {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.compoundClass td, th {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-#compoundTb td {
-    text-align: center;
-}
-
-.masterDetailTable {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.masterDetailTable th, .masterDetailTable td {
-    padding-left: 30px !important;
-    padding-right: 30px !important;
-}
-
-/* Create two unequal columns that floats next to each other */
-.column {
-    float: left;
-    padding: 10px;
-  }
-  
-  .left {
-    width: 60%;
-  }
-  
-  .right {
-    width: 20%;
-  }
-  
-  /* Clear floats after the columns */
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
-  .invisible {
-      display: none;
-  }
-
-.dt-specialColor{
-    background-color: unset !important;
-}
-
-table.dataTable tbody tr:hover {
-    background-color:transparent !important;
-}
-
-.dataTables_filter {
-    margin-right: 2.5%;
-    padding-bottom: 25px;
-}
-
-.dataTables_length {
-    margin-left: 2.5%;
-    padding-bottom: 26px;
-}
-
-.dataTables_info {
-    margin-left: 2.5%;
-    padding-top: 35px !important;
-    padding-bottom: 25px !important;
-}
-
-.dataTables_paginate {
-    margin-right: 2.5%;
-    padding-top: 25px !important;
-    padding-bottom: 25px !important;
-}
-
 #moreInfBut {
     display:inline-block;
     padding:0.4em 2em;
@@ -262,4 +177,82 @@ table.dataTable tbody tr:hover {
     color:white;
     background-color: #E85A24;
     border-color:#E85A24;
+}
+
+/* These classes apply formatting to the master detail table */
+.compoundClass {
+    margin-left: auto;
+    margin-right: auto;
+}
+.compoundClass td, th {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+#compoundTb td {
+    text-align: center;
+}
+.masterDetailTable {
+    margin-left: auto;
+    margin-right: auto;
+}
+.masterDetailTable th, .masterDetailTable td {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+}
+
+/* Sets master detail icon colour */
+.colorRed {
+    color: #E85A24 !important;
+}
+
+/* Create two unequal columns that floats next to each other for detail table*/
+.column {
+    float: left;
+    padding: 10px;
+}
+.left {
+    width: 60%;
+} 
+.right {
+    width: 20%;
+}  
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.invisible {
+      display: none;
+}
+
+/* removes background row colour in master detail table */
+.dt-specialColor{
+    background-color: unset !important;
+}
+
+/* Sets colour when row is hovered over */
+table.dataTable tbody tr:hover {
+    background-color:transparent !important;
+}
+
+/* These classes apply formatting to table elements - dropdown, search, info., page number */
+.dataTables_filter {
+    margin-right: 2.5%;
+    padding-bottom: 25px;
+}
+.dataTables_length {
+    margin-left: 2.5%;
+    padding-bottom: 26px;
+}
+.dataTables_info {
+    margin-left: 2.5%;
+    padding-top: 35px !important;
+    padding-bottom: 25px !important;
+}
+.dataTables_paginate {
+    margin-right: 2.5%;
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
 }
