@@ -1,4 +1,4 @@
-# FRStewart.github.io
+# Exscientia ChEMBL Compounds 
 
 This is a simple web app that represents a selection of compounds and assay results from the [***ChEMBL*** database](https://www.ebi.ac.uk/chembl/).
 
