@@ -3,7 +3,7 @@ window.onload = function() {
     // defines groups by number of rings for the compound data to be assigned to
     var rings1 = [], rings2 = [], rings3 = [], rings4 = [], rings5 = [];
     // Extracts data from compounds.json file. Change link to compounds.json when hosted on github
-    $.getJSON('/Data/compounds.json', function(compData) {
+    $.getJSON('https://api.jsonbin.io/b/5f47a770514ec5112d0f5663', function(compData) {
         for (var i = 0; i < compData.length; i++) {
             // if compound has 1 ring, assign to rings1
             if (compData[i].num_rings == 1) {
